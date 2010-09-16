@@ -1,0 +1,5 @@
+content     addons   chrome/chromeFiles/content/
+skin        addons   classic/1.0 chrome/chromeFiles/skin/
+overlay		chrome://browser/content/browser.xul	chrome://addons/content/overlay.xul
+
+
