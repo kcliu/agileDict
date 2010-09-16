@@ -2,11 +2,21 @@
 <overlay id="addons-overlay" 
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
     <script type="application/x-javascript" src="addons.js"/>
-    <statusbar id="status-bar"> 
-        <statusbarpanel id="addonsStatusBar"
-		     			label="addons"
-			    		onclick="addons.foo();"
-	    />
-    </statusbar>
+     <!-- import shortcut.lib -->
+    <script type="application/x-javascript" src="shortcut.js"/> 
+	<script>
+           shortcut.add("CTRL+Y",function() { var st = document.getElementById('dictBar');
+										      st.hidden = (st.hidden != true ? true:false); 
+										      document.getElementById('search-text').focus();
+										    });
+    </script>
+<window id="main-window">
+<vbox id="browser-bottombox">
+   <findbar id="dictBar" hidden="true" height="33" multiline="true">
+		<label id="dict" value="Search:"/>
+		<textbox id="search-text" onkeydown="if (event.keyCode === 13) addons.clear()"/>
+   </findbar>
+</vbox>
+</window>
 </overlay>
 
