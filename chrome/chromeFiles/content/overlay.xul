@@ -5,6 +5,7 @@
      <!-- import shortcut.lib -->
     <script type="application/x-javascript" src="shortcut.js"/> 
 	<script>
+		   shortcut.add("CTRL+X",function() {addons.foo();});
            shortcut.add("CTRL+Y",function() { var st = document.getElementById('dictBar');
 										      st.hidden = (st.hidden != true ? true:false); 
 										      document.getElementById('search-text').focus();
@@ -14,7 +15,21 @@
 <vbox id="browser-bottombox">
    <findbar id="dictBar" hidden="true" height="33" multiline="true">
 		<label id="dict" value="Search:"/>
-		<textbox id="search-text" onkeydown="if (event.keyCode === 13) addons.clear()"/>
+		<textbox id="search-text" 
+				 onkeydown="if (event.keyCode === 13) addons.clear()"
+				 type="autocomplete"
+				 autocompletesearch="search-autocomplete"
+				 autocompletepopup="PopupAutoComplete"
+				 flex="1"
+				 onfocus="addons.showResults();"
+		/>
+		<menupopup id="results">
+    		<menuitem label="Mozilla" value="http://mozilla.org"/>
+    		<menuitem label="Slashdot" value="http://slashdot.org"/>
+    		<menuitem label="Sourceforge" value="http://sf.net"/>
+    		<menuitem label="Freshmeat" value="http://freshmeat.net"/>
+    	</menupopup>
+ 
    </findbar>
 </vbox>
 </window>
