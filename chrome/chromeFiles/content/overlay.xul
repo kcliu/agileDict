@@ -13,17 +13,23 @@
     </script>
 <window id="main-window">
 <vbox id="browser-bottombox">
-    <findbar id="dictBar" hidden="true" height="33" multiline="true">
-	    <label id="dict" value="Search:"/>
+   <findbar id="dictBar" hidden="true" height="33" multiline="true">
+		<label id="dict" value="Search:"/>
 		<textbox id="search-text" 
-	             onkeydown="if (event.keyCode === 13) addons.clear()"
+				 onkeydown="if (event.keyCode === 13) addons.clear()"
 				 type="autocomplete"
 				 autocompletesearch="search-autocomplete"
 				 autocompletepopup="PopupAutoComplete"
 				 flex="1"
+				 onfocus="addons.showResults();"
 		/>
- 		<textbox id="text1" type="autocomplete" autocompletesearch="simple-autocomplete" showcommentcolumn="true"
-         autocompletesearchparam='[{"value":"mark","comment":"cool dude"},{"value":"mary","comment":"nice lady"},{"value":"jimmy","comment":"very uncool guy"},{"value":"jimbo","comment":null}]' />
+		<menupopup id="results">
+    		<menuitem label="Mozilla" value="http://mozilla.org"/>
+    		<menuitem label="Slashdot" value="http://slashdot.org"/>
+    		<menuitem label="Sourceforge" value="http://sf.net"/>
+    		<menuitem label="Freshmeat" value="http://freshmeat.net"/>
+    	</menupopup>
+ 
    </findbar>
 </vbox>
 </window>

@@ -5,6 +5,11 @@ var addons = function () {
 		},
 		clear: function() {
 			document.getElementById('search-text').value = ''; 
+		},
+		showResults: function() {
+			var ret = document.getElementById("");
+			ret.setAttribute('context','results');
 		}
+		
 	}
 }();
