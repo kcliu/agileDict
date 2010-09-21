@@ -18,8 +18,9 @@
 		<textbox id="search-text" 
 				 onkeydown="if (event.keyCode === 13) addons.clear()"
 				 type="autocomplete"
-				 autocompletesearch="search-autocomplete"
+				 autocompletesearch="simple-autocomplete"
 				 autocompletepopup="PopupAutoComplete"
+				 autocompletesearchparam='[{"value":"mark","comment":"cool dude"},{"value":"mary","comment":"nice lady"},{"value":"jimmy","comment":"very uncool guy"},{"value":"jimbo","comment":null}]'
 				 flex="1"
 				 onfocus="addons.showResults();"
 		/>
