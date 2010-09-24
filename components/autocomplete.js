@@ -1,8 +1,18 @@
+const Cc = Components.classes;
 const Ci = Components.interfaces;
+const Cr = Components.results;
+const Cu = Components.utils;
+
+//TODO FF4 only : Cu.import("resource://gre/modules/JSON.jsm");
 
 const CLASS_ID = Components.ID("6224daa1-71a2-4d1a-ad90-01ca1c08e323");
 const CLASS_NAME = "Simple AutoComplete";
 const CONTRACT_ID = "@mozilla.org/autocomplete/search;1?name=simple-autocomplete";
+const HTTP_OK                    = 200;
+const HTTP_INTERNAL_SERVER_ERROR = 500;
+const HTTP_BAD_GATEWAY           = 502;
+const HTTP_SERVICE_UNAVAILABLE   = 503;
+
 
 // Implements nsIAutoCompleteResult
 function SimpleAutoCompleteResult(searchString, searchResult,
@@ -130,30 +140,104 @@ SimpleAutoCompleteSearch.prototype = {
    * @param previousResult - A previous result to use for faster searchinig
    * @param listener - A listener to notify when the search is complete
    */
+  _request: null,
+  _listener: null,
+  _suggestURI: null,
   startSearch: function(searchString, searchParam, result, listener) {
-    // This autocomplete source assumes the developer attached a JSON string
-    // to the the "autocompletesearchparam" attribute or "searchParam" property
-    // of the <textbox> element. The JSON is converted into an array and used
-    // as the source of match data. Any values that match the search string
-    // are moved into temporary arrays and passed to the AutoCompleteResult
-    if (searchParam.length > 0) {
-      var nativeJSON = Components.classes["@mozilla.org/dom/json;1"].createInstance(Ci.nsIJSON);
-      var searchResults = nativeJSON.decode(searchParam);
-      var results = [];
-      var comments = [];
-      for (i=0; i<searchResults.length; i++) {
-        if (searchResults[i].value.indexOf(searchString) == 0) {
-          results.push(searchResults[i].value);
-          if (searchResults[i].comment)
-            comments.push(searchResults[i].comment);
-          else
-            comments.push(null);
-        }
-      }
-      var newResult = new SimpleAutoCompleteResult(searchString, Ci.nsIAutoCompleteResult.RESULT_SUCCESS, 0, "", results, comments);
-      listener.onSearchResult(this, newResult);
+    this.stopSearch();
+    this._listener = listener;
+	  // Actually do the search
+    this._request = Cc["@mozilla.org/xmlextras/xmlhttprequest;1"].
+                   createInstance(Ci.nsIXMLHttpRequest);
+	const prelink = 'http://suggestqueries.google.com/complete/search?client=suggest&hjson=t&ds=d&hl=zh-TW&jsonp=window.google.ac.hr&q='
+	this._suggestURI = prelink+searchString; 
+	dump("\n"+this._suggestURI+"\n");
+	var method = "GET";
+    this._request.open(method, this._suggestURI, true);
+	 var self = this;
+    function onReadyStateChange() {
+      self.onReadyStateChange();
+    }
+    this._request.onreadystatechange = onReadyStateChange;
+    this._request.send("");
+	
+
+  },
+	_isBackoffError: function SAC__isBackoffError(status) {
+    return ((status == HTTP_INTERNAL_SERVER_ERROR) ||
+            (status == HTTP_BAD_GATEWAY) ||
+            (status == HTTP_SERVICE_UNAVAILABLE));
+  },
+
+onReadyStateChange: function() {
+    // xxx use the real const here
+    if (!this._request || this._request.readyState != 4)
+      return;
+
+    try {
+      var status = this._request.status;
+    } catch (e) {
+      // The XML HttpRequest can throw NS_ERROR_NOT_AVAILABLE.
+      return;
+    }
+
+    if (this._isBackoffError(status)) {
+      //this._noteServerError();	
+	  dump("server error\n");
+      return;
+    }
+
+    var responseText = this._request.responseText;
+    if (status != HTTP_OK || responseText == "")
+      return;
+
+	//dump("\nresponseText:"+responseText);
+	//get JSON format	
+	var output = responseText.match(/window.google.ac.hr\((.*)\)/);	
+	output = RegExp.$1;
+	//dump("\n output:"+output);
+	
+    var serverResults = JSON.parse(output);
+	dump("\n serverResults:"+serverResults);
+    var searchString = serverResults[0] || "";
+    var results = serverResults[1] || [];
+	dump("\n results:"+results);
+
+    var comments = [];  // "comments" column values for suggestions
+
+    // fill out the comment column for the suggestions
+    for (var i = 0; i < results.length; ++i)
+      comments.push("");
+
+    // now put the history results above the suggestions
+ 	var newResult = new SimpleAutoCompleteResult(searchString, Ci.nsIAutoCompleteResult.RESULT_SUCCESS, 0, "", results, comments);
+ 	this._listener.onSearchResult(this, newResult);
+
+    // Reset our state for next time.
+    this._reset();
+	},
+	_reset: function () {
+        this._listener = null;
+		this._request = null;
+	},
+	onResultsReady: function(searchString, results, comments) {
+    if (this._listener) {
+      var result = new SuggestAutoCompleteResult(
+          searchString,
+          Ci.nsIAutoCompleteResult.RESULT_SUCCESS,
+          0,
+          "",
+          results,
+          comments);
+
+      this._listener.onSearchResult(this, result);
+
+      // Null out listener to make sure we don't notify it twice, in case our
+      // timer callback still hasn't run.
+      this._listener = null;
     }
   },
+
 
   /*
    * Stop an asynchronous search that is in progress
