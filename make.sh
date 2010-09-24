@@ -2,5 +2,5 @@
 #pushd chrome/chromeFiles
 #zip -r addons.jar content/ skin/
 #popd
-zip addons.xpi install.rdf chrome.manifest chrome/chromeFiles/* components/* -r
+zip GoogleDict.xpi install.rdf chrome.manifest chrome/chromeFiles/* components/* -r
 #rm chrome/chromeFiles/vocab.jar

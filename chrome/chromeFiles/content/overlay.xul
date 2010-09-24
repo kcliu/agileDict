@@ -1,11 +1,10 @@
 <?xml version="1.0"?>
-<overlay id="addons-overlay" 
+<overlay id="GoogleDict-overlay" 
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-    <script type="application/x-javascript" src="addons.js"/>
+    <script type="application/x-javascript" src="GoogleDict.js"/>
      <!-- import shortcut.lib -->
     <script type="application/x-javascript" src="shortcut.js"/> 
 	<script>
-		   shortcut.add("CTRL+X",function() {addons.foo();});
            shortcut.add("CTRL+Y",function() { var st = document.getElementById('dictBar');
 										      st.hidden = (st.hidden != true ? true:false); 
 										      document.getElementById('search-text').focus();
@@ -16,13 +15,11 @@
    <findbar id="dictBar" hidden="true" height="33" multiline="true">
 		<label id="dict" value="Search:"/>
 		<textbox id="search-text" 
-				 onkeydown="if (event.keyCode === 13) addons.clear()"
+				 onkeydown="if (event.keyCode === 13) GoogleDict.clear()"
 				 type="autocomplete"
-				 autocompletesearch="simple-autocomplete"
+				 autocompletesearch="GoogleDict-autocomplete"
 				 autocompletepopup="PopupAutoComplete"
-				 autocompletesearchparam='[{"value":"mark","comment":"cool dude"},{"value":"mary","comment":"nice lady"},{"value":"jimmy","comment":"very uncool guy"},{"value":"jimbo","comment":null}]'
 				 flex="1"
-				 onfocus="addons.showResults();"
 		/>
 		<menupopup id="results">
     		<menuitem label="Mozilla" value="http://mozilla.org"/>
