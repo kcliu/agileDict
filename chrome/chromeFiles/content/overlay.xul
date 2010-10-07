@@ -5,7 +5,7 @@
      <!-- import shortcut.lib -->
     <script type="application/x-javascript" src="shortcut.js"/> 
 	<script>
-           shortcut.add("CTRL+Y",function() { var st = document.getElementById('dictBar');
+           shortcut.add("ALT+X",function() { var st = document.getElementById('dictBar');
 										      st.hidden = (st.hidden != true ? true:false); 
 										      document.getElementById('search-text').focus();
 										    });
