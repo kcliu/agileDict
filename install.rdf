@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
      xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+
   <Description about="urn:mozilla:install-manifest">
     <em:id>agileDict@kcliu.tw</em:id>
     <em:version>1.0</em:version>
     <!-- Front End MetaData -->
-    <em:name>GoogleDict</em:name>
+    <em:name>agileDict</em:name>
     <em:description>quick search from Google dictionary</em:description>
     <em:creator>kcliu</em:creator>
-    <em:homepageURL>http://www.example.com/</em:homepageURL>
     <!-- Target Application this extension can install into, 
          with minimum and maximum supported versions. --> 
     <em:targetApplication>
