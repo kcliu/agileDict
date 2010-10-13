@@ -154,7 +154,7 @@ SimpleAutoCompleteSearch.prototype = {
     	this._request = Cc["@mozilla.org/xmlextras/xmlhttprequest;1"].
         createInstance(Ci.nsIXMLHttpRequest);
 		this._suggestURI = prelink+searchString; 
-		dump("\n"+this._suggestURI+"\n");
+		//dump("\n"+this._suggestURI+"\n");
     	this._request.open(method, this._suggestURI, true);
     	function onReadyStateChange() {
       		self.onReadyStateChange();
@@ -196,17 +196,17 @@ SimpleAutoCompleteSearch.prototype = {
 	//dump("\n output:"+output);
 	
     var serverResults = JSON.parse(output);
-	dump("\n serverResults:"+serverResults);
+	//dump("\n serverResults:"+serverResults);
     var searchString = serverResults[0] || "";
     var results = serverResults[1] || [];
-	dump("\n results:"+results);
+	//dump("\n results:"+results);
 
     var comments = [];  // "comments" column values for suggestions
 
     // fill out the comment column for the suggestions
     for (var i = 0; i < results.length; ++i)
       	comments.push("");
-	dump("\n comments:"+comments);
+	//dump("\n comments:"+comments);
     // now put the history results above the suggestions
  	var newResult = new SimpleAutoCompleteResult(searchString, Ci.nsIAutoCompleteResult.RESULT_SUCCESS, 0, "", results, comments);
  	this._listener.onSearchResult(this, newResult);
@@ -225,7 +225,7 @@ SimpleAutoCompleteSearch.prototype = {
     stopSearch: function() {
 		if (this._request) {
 			this._request.abort();
-			this._request();
+			//this._request();
 		}
     },    
     QueryInterface: function(aIID) {
