@@ -1,5 +1,5 @@
-content     GoogleDict   chrome/chromeFiles/content/
-skin        GoogleDict   classic/1.0 chrome/chromeFiles/skin/
-overlay		chrome://browser/content/browser.xul	chrome://GoogleDict/content/overlay.xul
+content     agileDict   chrome/chromeFiles/content/
+skin        agileDict   classic/1.0 chrome/chromeFiles/skin/
+overlay		chrome://browser/content/browser.xul	chrome://agileDict/content/overlay.xul
 
 

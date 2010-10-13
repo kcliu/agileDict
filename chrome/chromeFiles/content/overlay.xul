@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<overlay id="GoogleDict-overlay" 
+<overlay id="agileDict-overlay" 
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-    <script type="application/x-javascript" src="GoogleDict.js"/>
+    <script type="application/x-javascript" src="agileDict.js"/>
      <!-- import shortcut.lib -->
     <script type="application/x-javascript" src="shortcut.js"/> 
 	<script>
@@ -15,9 +15,9 @@
    <findbar id="dictBar" hidden="true" height="33" multiline="true">
 		<label id="dict" value="Search:"/>
 		<textbox id="search-text" 
-				 onkeydown="if (event.keyCode === 13) GoogleDict.clear()"
+				 onkeydown="if (event.keyCode === 13) agileDict.clear()"
 				 type="autocomplete"
-				 autocompletesearch="GoogleDict-autocomplete"
+				 autocompletesearch="agileDict-autocomplete"
 				 autocompletepopup="PopupAutoComplete"
 				 flex="1"
 		/>

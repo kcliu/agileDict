@@ -6,8 +6,8 @@ const Cu = Components.utils;
 //TODO FF4 only : Cu.import("resource://gre/modules/JSON.jsm");
 
 const CLASS_ID = Components.ID("6224daa1-71a2-4d1a-ad90-01ca1c08e323");
-const CLASS_NAME = "GoogleDict AutoComplete";
-const CONTRACT_ID = "@mozilla.org/autocomplete/search;1?name=GoogleDict-autocomplete";
+const CLASS_NAME = "agileDict AutoComplete";
+const CONTRACT_ID = "@mozilla.org/autocomplete/search;1?name=agileDict-autocomplete";
 
 const HTTP_OK                    = 200;
 const HTTP_INTERNAL_SERVER_ERROR = 500;
@@ -206,7 +206,7 @@ SimpleAutoCompleteSearch.prototype = {
     // fill out the comment column for the suggestions
     for (var i = 0; i < results.length; ++i)
       	comments.push("");
-
+	dump("\n comments:"+comments);
     // now put the history results above the suggestions
  	var newResult = new SimpleAutoCompleteResult(searchString, Ci.nsIAutoCompleteResult.RESULT_SUCCESS, 0, "", results, comments);
  	this._listener.onSearchResult(this, newResult);

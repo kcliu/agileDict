@@ -1,4 +1,4 @@
-var GoogleDict = function () {
+var agileDict = function () {
 	return {
 		foo: function() {
 			alert("hello world");
