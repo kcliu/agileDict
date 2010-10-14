@@ -2,7 +2,6 @@ const Cc = Components.classes;
 const Ci = Components.interfaces;
 const Cr = Components.results;
 const Cu = Components.utils;
-
 //TODO FF4 only : Cu.import("resource://gre/modules/JSON.jsm");
 
 const CLASS_ID = Components.ID("6224daa1-71a2-4d1a-ad90-01ca1c08e323");
@@ -14,6 +13,14 @@ const HTTP_INTERNAL_SERVER_ERROR = 500;
 const HTTP_BAD_GATEWAY           = 502;
 const HTTP_SERVICE_UNAVAILABLE   = 503;
 
+
+//for DEBUG, use LOG();
+const LOG_PREFIX = "*** aglieDict: ";
+var DEBUG = false;
+function LOG(aText){
+	if (DEBUG)
+		dump(LOG_PREFIX + aText + "\n");
+}
 
 // Implements nsIAutoCompleteResult
 function SimpleAutoCompleteResult(searchString, searchResult,
@@ -154,7 +161,7 @@ SimpleAutoCompleteSearch.prototype = {
     	this._request = Cc["@mozilla.org/xmlextras/xmlhttprequest;1"].
         createInstance(Ci.nsIXMLHttpRequest);
 		this._suggestURI = prelink+searchString; 
-		//dump("\n"+this._suggestURI+"\n");
+		LOG(this._suggestURI);
     	this._request.open(method, this._suggestURI, true);
     	function onReadyStateChange() {
       		self.onReadyStateChange();
@@ -181,7 +188,7 @@ SimpleAutoCompleteSearch.prototype = {
 
     if (this._isBackoffError(status)) {
       	//this._noteServerError();	
-	  	dump("server error\n");
+	  	LOG("server error");
       	return;
     }
 
@@ -189,24 +196,24 @@ SimpleAutoCompleteSearch.prototype = {
     if (status != HTTP_OK || responseText == "")
      	 return;
 
-	//dump("\nresponseText:"+responseText);
+	LOG("responseText:"+responseText);
 	//get JSON format	
 	var output = responseText.match(/window.google.ac.hr\((.*)\)/);	
 	output = RegExp.$1;
-	//dump("\n output:"+output);
+	LOG("output:"+output);
 	
     var serverResults = JSON.parse(output);
-	//dump("\n serverResults:"+serverResults);
+	LOG("serverResults:"+serverResults);
     var searchString = serverResults[0] || "";
     var results = serverResults[1] || [];
-	//dump("\n results:"+results);
+	LOG("results:"+results);
 
     var comments = [];  // "comments" column values for suggestions
 
     // fill out the comment column for the suggestions
     for (var i = 0; i < results.length; ++i)
       	comments.push("");
-	//dump("\n comments:"+comments);
+	LOG("comments:"+comments);
     // now put the history results above the suggestions
  	var newResult = new SimpleAutoCompleteResult(searchString, Ci.nsIAutoCompleteResult.RESULT_SUCCESS, 0, "", results, comments);
  	this._listener.onSearchResult(this, newResult);
