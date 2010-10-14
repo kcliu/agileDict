@@ -196,26 +196,24 @@ SimpleAutoCompleteSearch.prototype = {
     if (status != HTTP_OK || responseText == "")
      	 return;
 
-	LOG("responseText:"+responseText);
+	LOG("responseText:" + responseText);
 	//get JSON format	
 	var output = responseText.match(/window.google.ac.hr\((.*)\)/);	
 	output = RegExp.$1;
-	LOG("output:"+output);
+	LOG("output:" + output);
 	
     var serverResults = JSON.parse(output);
-	LOG("serverResults:"+serverResults);
+	LOG("serverResults:" + serverResults);
     var searchString = serverResults[0] || "";
     var results = serverResults[1] || [];
-	LOG("results:"+results);
-
-    var comments = [];  // "comments" column values for suggestions
-
-    // fill out the comment column for the suggestions
-    for (var i = 0; i < results.length; ++i)
-      	comments.push("");
-	LOG("comments:"+comments);
+	LOG("results:" + results);
+	//remove the last element of entry (becuase google dict put only the index number in the last element of each entry)
+	for(var i = 0;i < results.length;i++){
+		results[i].pop();
+	}
+	
     // now put the history results above the suggestions
- 	var newResult = new SimpleAutoCompleteResult(searchString, Ci.nsIAutoCompleteResult.RESULT_SUCCESS, 0, "", results, comments);
+ 	var newResult = new SimpleAutoCompleteResult(searchString, Ci.nsIAutoCompleteResult.RESULT_SUCCESS, 0, "", results);
  	this._listener.onSearchResult(this, newResult);
 
     // Reset our state for next time.

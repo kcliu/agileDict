@@ -21,13 +21,6 @@
 				 autocompletepopup="PopupAutoComplete"
 				 flex="1"
 		/>
-		<menupopup id="results">
-    		<menuitem label="Mozilla" value="http://mozilla.org"/>
-    		<menuitem label="Slashdot" value="http://slashdot.org"/>
-    		<menuitem label="Sourceforge" value="http://sf.net"/>
-    		<menuitem label="Freshmeat" value="http://freshmeat.net"/>
-    	</menupopup>
- 
    </findbar>
 </vbox>
 </window>
